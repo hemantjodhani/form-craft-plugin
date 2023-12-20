@@ -1,0 +1,225 @@
+.fcp-metabox-wrapper {
+    display: flex;
+}
+
+.fcp-form-area {
+    width: 70%;
+}
+
+.fcp-input-wigets {
+    width: 30%;
+    padding-left: 10px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.fcp-widget-icon {
+    width: 33px;
+}
+
+.fcp-single-widget {
+    padding: 15px 30px;
+    text-align: center;
+    cursor: pointer;
+    width: 50px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 4px;
+    /* height: 90px; */
+}
+
+.fcp-input-wigets {
+    padding-left: 10px;
+    height: 100%;
+}
+
+.fcp-single-field-wrap {
+    margin-bottom: 20px;
+}
+
+.fcp-name-field-specimen .fcp-name-fields-wrap,
+.fcp-city-state-spicimen-wrap {
+    display: flex;
+    gap: 20px;
+}
+
+.fcp-name-field-specimen input,
+.fcp-city-state-spicimen-wrap .fcp-city-field-wrap,
+.fcp-state-field-wrap {
+    width: 50%;
+}
+
+.fcp-form-fields-wrapper input,
+select {
+    background-color: white !important;
+}
+
+.fcp-mini-setting-bar img {
+    cursor: pointer;
+    padding-right: 5px;
+    border-right: 1px solid black;
+}
+
+.fcp-mini-setting-bar {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    width: 95px;
+}
+
+.fcp-mini-setting-bar :last-child {
+    border: none;
+}
+
+.fcp-field-settings-icon {
+    width: 30px;
+}
+
+.fcp-mini-setting-bar {
+    margin-bottom: 10px;
+    display: none;
+}
+
+.fcp-single-field-wrap:hover .fcp-mini-setting-bar {
+    display: flex;
+}
+
+.fcp-form-submit-specimen {
+    display: inline-block;
+    padding: 3px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: 2px solid #007bff;
+    color: #ffffff;
+    background-color: #007bff;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Define button hover state */
+.fcp-form-submit-specimen:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.fcp-form-control {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.fcp-form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Popup's css */
+.white-popup {
+    position: relative;
+    background: #FFF;
+    padding: 40px;
+    width: auto;
+    max-width: 200px;
+    margin: 20px auto;
+    border-radius: 7px;
+}
+
+/* Popup's css end here */
+.fcp-popup-icon {
+    height: 29px;
+}
+
+.fcp--field-settings--form input {
+    width: 100%;
+    margin-top: 6px;
+}
+
+/* Switch's css */
+.fcp--field-settings--form .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.fcp--field-settings--form .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.fcp--field-settings--form .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.fcp--field-settings--form .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.fcp--field-settings--form input:checked+.slider {
+    background-color: #2196F3;
+}
+
+.fcp--field-settings--form input:focus+.slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+.fcp--field-settings--form input:checked+.slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.fcp--field-settings--form .slider.round {
+    border-radius: 34px;
+}
+
+.fcp--field-settings--form .slider.round:before {
+    border-radius: 50%;
+}
+/* Switch's css ends here*/
+.fcp-required{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 11px;
+}
+
+.fcp-submit-settings-admin{
+    width: 145px!important;
+    margin-top: 18px!important;
+}
