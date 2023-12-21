@@ -37,6 +37,10 @@ $fcp_all_input_types = InputTypes::get_all_input_types()
 	<form class="fcp--field-settings--form">
 		<h3>Field Settings</h3>
 		
+		
+
+	
+
 
 
 		<input type="submit" value="Save changes" class="fcp-form-submit-specimen fcp-submit-settings-admin">

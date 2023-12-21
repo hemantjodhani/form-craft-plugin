@@ -223,3 +223,27 @@ select {
     width: 145px!important;
     margin-top: 18px!important;
 }
+
+.fcp-checkboxes-admin input{
+    width: 75%;
+}
+
+.fcp-checkboxes-admin li{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fcp-checkboxes-admin span{
+    cursor: pointer;
+    background: cadetblue;
+    color: white;
+    font-weight: bolder;
+    padding: 7px;
+    height: 8px;
+    width: 9px;
+    border-radius: 50%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
