@@ -247,3 +247,7 @@ select {
     display: flex;
     align-items: center;
 }
+
+.fcp-setting-field-cc{
+    display: none;
+}

@@ -36,9 +36,119 @@ $fcp_all_input_types = InputTypes::get_all_input_types()
 <div id="first-popup" class="mfp-hide white-popup">
 	<form class="fcp--field-settings--form">
 		<h3>Field Settings</h3>
+
 		<div class="fcp-setting-fields-wrap">
-			
+
+			<div class="fcp-placeholder-admin-wrap fcp-setting-field-cc">
+				<label for="fcp-placeholder">Placeholder</label>
+				<input type="text" class="fcp-placeholder-val-admin">
+			</div>
+
+			<div class="fcp-label-admin-wrap fcp-setting-field-cc">
+				<label for="fcp-label">Label</label>
+				<input type="text" class="fcp-label-val-admin">
+			</div>
+
+			<div class="fcp-required fcp-setting-field-cc">
+				<label for="fcp-isRequired">Required</label>
+				<label class="switch">
+					<input type="checkbox" class="fcp-req-val-admin">
+					<span class="slider round"></span>
+				</label>
+			</div>
+
+			<div class="fcp-min--max-admin-wrap fcp-setting-field-cc">
+				<div class="fcp-min-admin-wrap">
+					<label for="fcp-label">Minimun</label>
+					<input type="number" class="fcp-min-num-val-admin">
+				</div>
+	
+				<div class="fcp-max-admin-wrap">
+					<label for="fcp-label">Maximun</label>
+					<input type="number" class="fcp-max-num-val-admin">
+				</div>
+			</div>
+
+			<div class="fcp-name-fields-wrap fcp-setting-field-cc">
+				<div class="fcp-required fcp-req-firstname">
+					<label for="fcp-isRequired">Firstname</label>
+					<label class="switch">
+						<input type="checkbox" class="fcp-firstn-req-val-admin" checked>
+						<span class="slider round"></span>
+					</label>
+				</div>
+
+				<div class="fcp-required fcp-req-last-name fcp-setting-field-cc">
+					<label for="fcp-isRequired">Lastname</label>
+					<label class="switch">
+						<input type="checkbox" class="fcp-lastn-req-val-admin" checked>
+						<span class="slider round"></span>
+					</label>
+				</div>
+			</div>
+
+			<div class="fcp-address-settings-wrap fcp-setting-field-cc">
+				<div class="fcp-required fcp-street-ad">
+					<label for="fcp-street-adress">Street Address</label>
+					<label class="switch">
+						<input type="checkbox" class="fcp-stad-val-admin" checked>
+						<span class="slider round"></span>
+					</label>
+				</div>
+
+				<div class="fcp-required fcp-adli-two ">
+					<label for="fcp-adli-two">Address line 2</label>
+					<label class="switch">
+						<input type="checkbox" class="fcp-adli-val-admin" checked>
+						<span class="slider round"></span>
+					</label>
+				</div>
+
+				<div class="fcp-required">
+					<label for="fcp-city-req">City</label>
+					<label class="switch">
+						<input type="checkbox" class="fcp-city-val-admin" checked>
+						<span class="slider round"></span>
+					</label>
+				</div>
+
+				<div class="fcp-required fcp-state-admin-wrap">
+					<label for="fcp-state-req">State</label>
+					<label class="switch">
+						<input type="checkbox" class="fcp-state-val-admin" checked>
+						<span class="slider round"></span>
+					</label>
+				</div>
+
+				<div class="fcp-required fcp-zip-admin-wrap">
+					<label for="fcp-zpc">Zip code</label>
+					<label class="switch">
+						<input type="checkbox" class="fcp-zpc-val-admin" checked>
+						<span class="slider round"></span>
+					</label>
+				</div>
+
+				<div class="fcp-required fcp-country-admin-wrap">
+					<label for="fcp-country">Country</label>
+					<label class="switch">
+						<input type="checkbox" class="fcp-country-val-admin" checked>
+						<span class="slider round"></span>
+					</label>
+				</div>
+
+			</div>
+
+			<div class="fcp-checkboxes-admin-wrap fcp-setting-field-cc">
+				<ul class="fcp-checkboxes-admin">
+					<li><input type="text" value="Option 1"> <span>X</span></li>
+					<li><input type="text" value="Option 2"> <span>X</span></li>
+					<li><input type="text" value="Option 3"> <span>X</span></li>
+				</ul>
+				<button>+ Add more checkboxes</button>
+			</div>
+
 		</div>
 		<input type="submit" value="Save changes" class="fcp-form-submit-specimen fcp-submit-settings-admin">
 	</form>
 </div>
+

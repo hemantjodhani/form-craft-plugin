@@ -1,7 +1,7 @@
 const $ = jQuery;
+import all_fields from "./fcp-global-variables";
 
 function fcp_field_appender_admin() {
-
     function fcp_field_id_generator() {
         var idstr = String.fromCharCode(Math.floor((Math.random() * 25) + 65));
         do {
@@ -25,19 +25,36 @@ function fcp_field_appender_admin() {
         const NAME = `<div class="fcp-single-field-wrap fcp-name-field-specimen" data-id=${fcp_field_id} >${MINI_SETTINGS_BAR}<div class="fcp-name-fields-wrap"><input class="fcp-form-control" type="text" disabled placeholder="First name"><input class="fcp-form-control" type="text" disabled placeholder="Last name"></div></div>`;
         const TEXTAREA = `<div class="fcp-single-field-wrap" data-id=${fcp_field_id} ><div>${MINI_SETTINGS_BAR}<label for="paragraph">Paragraph</label></div><textarea name="paragraph" id="paragraph" cols="65" rows="15" disabled></textarea></div>`
         if (field_name === "name") {
+            var data = {
+                field_type: field_name,
+                settings: {
+                    placeholder: '',
+                    label: '',
+                    required: false
+                },
+                fieldID: fcp_field_id
+            }
+            all_fields 
             $('.fcp-form-fields-wrapper').append(NAME);
+
         } else if (field_name === "address") {
-            $('.fcp-form-fields-wrapper').append(ADDRESS);
+            
         } else if (field_name === "checkbox") {
-            $('.fcp-form-fields-wrapper').append(CHECKBOX);
+            // $('.fcp-form-fields-wrapper').append(CHECKBOX);
         } else if (field_name === "textarea") {
-            $('.fcp-form-fields-wrapper').append(TEXTAREA);
+            // $('.fcp-form-fields-wrapper').append(TEXTAREA);
         }
         else if (field_name === "email") {
-            $('.fcp-form-fields-wrapper').append(`<div class="fcp-single-field-wrap" data-id=${fcp_field_id} >${MINI_SETTINGS_BAR}<div><label for="paragraph">Email</label></div><input class='fcp-form-control' type="${field_name}" disabled></div>`);
+            // $('.fcp-form-fields-wrapper').append(`<div class="fcp-single-field-wrap" data-id=${fcp_field_id} >${MINI_SETTINGS_BAR}<div><label for="paragraph">Email</label></div><input class='fcp-form-control' type="${field_name}" disabled></div>`);
+        }
+        else if (field_name === "text") {
+            // $('.fcp-form-fields-wrapper').append(`<div class="fcp-single-field-wrap" data-id=${fcp_field_id} >${MINI_SETTINGS_BAR}<div><label for="paragraph">Email</label></div><input class='fcp-form-control' type="${field_name}" disabled></div>`);
+        }
+        else if (field_name === "email") {
+            // $('.fcp-form-fields-wrapper').append(`<div class="fcp-single-field-wrap" data-id=${fcp_field_id} >${MINI_SETTINGS_BAR}<div><label for="paragraph">Email</label></div><input class='fcp-form-control' type="${field_name}" disabled></div>`);
         }
         else {
-            $('.fcp-form-fields-wrapper').append(`<div class="fcp-single-field-wrap" data-id=${fcp_field_id} >${MINI_SETTINGS_BAR}<div><label for="paragraph">Untitled</label></div><input class='fcp-form-control' type="${field_name}" disabled></div>`);
+            // $('.fcp-form-fields-wrapper').append(`<div class="fcp-single-field-wrap" data-id=${fcp_field_id} >${MINI_SETTINGS_BAR}<div><label for="paragraph">Untitled</label></div><input class='fcp-form-control' type="${field_name}" disabled></div>`);
         }
     });
 }

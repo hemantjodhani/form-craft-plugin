@@ -1,10 +1,9 @@
 const $ = jQuery;
-function fcp_update_specimen_fields_with_settings_and_create_json() {
 
+function fcp_update_specimen_fields_with_settings_and_create_json() {
     var field = "";
     var setting_field_type = ""
     var field_id = ""
-    var field_id_type_and_settings = [];
 
     $(document).on('click', '.fcp-popup-icon', function () {
         setting_field_type = $(this).closest('.fcp-mini-setting-bar').attr('data-settings');
@@ -33,24 +32,17 @@ function fcp_update_specimen_fields_with_settings_and_create_json() {
                 fieldID: field_id
             }
             
-        var existing_index = field_id_type_and_settings.findIndex(field => field.fieldID === field_id);
+            var existing_index = field_id_type_and_settings.findIndex(field => field.fieldID === field_id);
 
-        if (existing_index !== -1) {
+            if (existing_index !== -1) {
+                field_id_type_and_settings[existing_index] = text_field_data;
+                field.find("label").text(field_id_type_and_settings[existing_index].settings.label);
+                field.find("input").attr("placeholder", field_id_type_and_settings[existing_index].settings.placeholder);
+            } else {
+                field_id_type_and_settings.push(text_field_data);
+            }
+            console.log(field_id_type_and_settings)
             
-            field_id_type_and_settings[existing_index] = text_field_data;
-        } else {
-            field_id_type_and_settings.push(text_field_data);
-        }
-        field.find("label").text(text_field_data.settings.label);
-        field.find("input").attr("placeholder", text_field_data.settings.placeholder);
-        $('.fcp-placeholder-val-admin').val(text_field_data.settings.placeholder);
-        $('.fcp-label-val-admin').val(text_field_data.settings.label)
-        if(text_field_data.settings.req === true){
-
-            field.find('.fcp-req-val-admin').prop('checked', true);
-        }else{
-            field.find('.fcp-req-val-admin').prop('checked', false);
-        }
         } else if (setting_field_type === "number") {
             
         } else if (setting_field_type === "email") {
@@ -77,9 +69,9 @@ function fcp_update_specimen_fields_with_settings_and_create_json() {
         if (index_to_remove !== -1) {
             field_id_type_and_settings.splice(index_to_remove, 1);
         }
+        // console.log(field_id_type_and_settings)
         $(this).closest('.fcp-single-field-wrap').remove();
     });
 
 }
-
 export default fcp_update_specimen_fields_with_settings_and_create_json;
