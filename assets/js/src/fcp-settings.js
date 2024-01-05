@@ -8,7 +8,7 @@ function fcp_field_settings_handler() {
 		var setting_for = $(this).closest('.fcp-mini-setting-bar').attr('data-settings');
 		var data_of_the_field = fcp_get_data_from_object(field_id)
 		$('.fcp-setting-field-cc').hide()
-		// var settings = data_of_the_field.settings
+		var settings = data_of_the_field.settings
 
 		if (setting_for === "text" && data_of_the_field.field_type === "text") {
 			
@@ -60,16 +60,35 @@ function fcp_field_settings_handler() {
 			$('.fcp-required').css('display','flex')
 			$('.fcp-address-settings-wrap').show()
 
+			$('.fcp-label-val-admin').val(settings.label)
+			$('.fcp-req-val-admin').prop('checked', settings.required)
+			$('.fcp-stad-val-admin').prop('checked', settings.street_address)
+			$('.fcp-adli-val-admin').prop('checked', settings.address_line_2)
+			$('.fcp-city-val-admin').prop('checked', settings.city)
+			$('.fcp-state-val-admin').prop('checked', settings.state)
+			$('.fcp-zpc-val-admin').prop('checked', settings.zip_code)
+			$('.fcp-country-val-admin').prop('checked', settings.country)
 			
 		} else if (setting_for === "checkbox") {
+
 			$('.fcp-label-admin-wrap').show()
 			$('.fcp-checkboxes-admin-wrap').show()
+
 		} else if (setting_for === "password") {
+
 			$('.fcp-placeholder-admin-wrap').show()
 			$('.fcp-label-admin-wrap').show()
+			
+			$('.fcp-label-val-admin').val(settings.label)
+			$('.fcp-placeholder-val-admin').val(settings.placeholer)
+
 		} else if (setting_for === "textarea") {
+
 			$('.fcp-required').css('display','flex')
 			$('.fcp-label-admin-wrap').show()
+
+			$('.fcp-label-val-admin').val(settings.label)
+			$('.fcp-req-val-admin').prop('checked', settings.required)	
 		}
 		
 
