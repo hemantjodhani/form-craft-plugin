@@ -1,5 +1,6 @@
 const $ = jQuery;
 import all_fields from "./fcp-global-variables";
+import fcp_get_data_from_object from './fcp-data-provider'
 function fcp_update_specimen_fields_with_settings_and_create_json() {
     var field = "";
     var setting_field_type = ""
@@ -123,28 +124,122 @@ function fcp_update_specimen_fields_with_settings_and_create_json() {
             }
 
         } else if (setting_field_type === "address") {
+            var is_st_ad = $('.fcp-stad-val-admin').prop("checked");
+            var is_st_ad_2 = $('.fcp-adli-val-admin').prop("checked");
+            var is_city = $('.fcp-city-val-admin').prop("checked");
+            var is_state = $('.fcp-state-val-admin').prop("checked");
+            var is_zip_code = $(".fcp-zpc-val-admin").prop("checked");
+            var is_country = $(".fcp-country-val-admin").prop("checked");
+
             data = {
-                field_type: field_name,
+                field_type: setting_field_type,
                 settings: {
                     label: label_val,
                     required: req,
-                    street_address : true,
-                    address_line_2 : true,
-                    city           : true,
-                    state          : true,
-                    zip_code       : true,
-                    country        : true,
+                    street_address : is_st_ad,
+                    address_line_2 : is_st_ad_2,
+                    city           : is_city,
+                    state          : is_state,
+                    zip_code       : is_zip_code,
+                    country        : is_country,
                 },
                 fieldID: field_id
             }
+            if (existing_index !== -1) {
+                all_fields[existing_index] = data;
+            }
+            var settings =  all_fields[existing_index].settings
+            field.find('.fcp-adress-label-admin').text(settings.label)
+            if(settings.street_address === false){
+                field.find('.street-address-admin-wrap').hide()
+            }else{
+                field.find('.street-address-admin-wrap').show()
+            }
+
+            if(settings.address_line_2 === false){
+                field.find('.adlin-two-admin-wrap').hide()
+            }else{
+                field.find('.adlin-two-admin-wrap').show()                
+            }
+
+            if(settings.city === false){
+                field.find(".fcp-city-field-wrap-admin").hide()
+            }else{
+                field.find(".fcp-city-field-wrap-admin").show()
+            }
+
+            if(settings.state === false){
+                field.find(".fcp-state-field-wrap-admin").hide()
+            }else{
+                field.find(".fcp-state-field-wrap-admin").show()
+            }
             
+            if(settings.zip_code === false){
+                field.find(".fcp-zip-code-field-wrap-admin").hide()
+            }else{
+                field.find(".fcp-zip-code-field-wrap-admin").show()
+            }
+
+            if(settings.country === false){
+                field.find(".fcp-country-field-wrap-admin").hide()
+            }else{
+                field.find(".fcp-country-field-wrap-admin").show()
+            }
+
         } else if (setting_field_type === "checkbox") {
+
+
+            if (existing_index !== -1) {
+                all_fields[existing_index].fieldID = field_id;
+                all_fields[existing_index].field_type = setting_field_type;
+                all_fields[existing_index].settings.label = label_val
+            }
+
+            field.find('.fcp-label-admin').text(all_fields[existing_index].settings.label)
+            var data_of_the_field = fcp_get_data_from_object(all_fields[existing_index].fieldID)
+            var options = data_of_the_field.options
+			field.find('.fcp-checkbox-wrap-admin').html("")
+            
+			options.forEach((option) => {
+				field.find('.fcp-checkbox-wrap-admin').append(`<li class="fcp-single-checkbox-admin" data-checkbox="${option.option_id}"><input type="checkbox" value="" name="" id="option-1" disabled=""><label for="option-1">${option.value}</label></li>`)
+			});
 
         } else if (setting_field_type === "password") {
 
+            data = {
+                field_type: setting_field_type,
+                settings: {
+                    placeholder: placeholder_val,
+                    label: label_val,
+                },
+                fieldID: field_id
+            }
+
+            if (existing_index !== -1) {
+                all_fields[existing_index] = data;
+            }
+            field.find('.fcp-label-admin').text(all_fields[existing_index].settings.label)
+            field.find('.fcp-password-admin').attr("placeholder", all_fields[existing_index].settings.placeholder);
+
         } else if (setting_field_type === "textarea") {
 
+            data = {
+                field_type: setting_field_type,
+                settings: {
+                    label: label_val,
+                    required: req,
+                },
+                fieldID: field_id
+            }
+
+            if (existing_index !== -1) {
+                all_fields[existing_index] = data;
+            }
+
+            field.find('.fcp-label-admin').text(all_fields[existing_index].settings.label)
         }
+
+        jQuery.magnificPopup.close()
 
     })
 
@@ -156,8 +251,6 @@ function fcp_update_specimen_fields_with_settings_and_create_json() {
         if (index_to_remove !== -1) {
             all_fields.splice(index_to_remove, 1);
         }
-        all_fields = JSON.stringify(all_fields);
-        console.log(all_fields)
         $(this).closest('.fcp-single-field-wrap').remove();
     });
 

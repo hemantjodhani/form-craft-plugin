@@ -140,11 +140,11 @@ $fcp_all_input_types = InputTypes::get_all_input_types()
 
 			<div class="fcp-checkboxes-admin-wrap fcp-setting-field-cc">
 				<ul class="fcp-checkboxes-admin">
-					<li><input type="text" value="Option 1"> <span>X</span></li>
+					<!-- <li><input type="text" value="Option 1"> <span>X</span></li>
 					<li><input type="text" value="Option 2"> <span>X</span></li>
-					<li><input type="text" value="Option 3"> <span>X</span></li>
+					<li><input type="text" value="Option 3"> <span>X</span></li> -->
 				</ul>
-				<button>+ Add more checkboxes</button>
+				<button class="fcp-add-more-checkbox-btn">+ Add more checkboxes</button>
 			</div>
 
 		</div>

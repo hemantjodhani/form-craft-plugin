@@ -69,12 +69,20 @@ function fcp_field_settings_handler() {
 			$('.fcp-zpc-val-admin').prop('checked', settings.zip_code)
 			$('.fcp-country-val-admin').prop('checked', settings.country)
 			
-		} else if (setting_for === "checkbox") {
+		} else if (setting_for === "checkbox" && data_of_the_field.field_type === "checkbox") {
 
 			$('.fcp-label-admin-wrap').show()
 			$('.fcp-checkboxes-admin-wrap').show()
 
-		} else if (setting_for === "password") {
+			$('.fcp-label-val-admin').val(settings.label)
+			var options = data_of_the_field.options
+			$('.fcp-checkboxes-admin').html("")
+			options.forEach((option) => {
+				$('.fcp-checkboxes-admin').append(`<li data-id=${option.option_id}><input type="text" value="${option.value}" class="fcp-checkbox--val--admin"> <span class="fcp-checkbox-remove-btn">X</span></li>`)
+			});
+			
+
+		} else if (setting_for === "password" && data_of_the_field.field_type === "password") {
 
 			$('.fcp-placeholder-admin-wrap').show()
 			$('.fcp-label-admin-wrap').show()
@@ -88,7 +96,8 @@ function fcp_field_settings_handler() {
 			$('.fcp-label-admin-wrap').show()
 
 			$('.fcp-label-val-admin').val(settings.label)
-			$('.fcp-req-val-admin').prop('checked', settings.required)	
+			$('.fcp-req-val-admin').prop('checked', settings.required)
+			
 		}
 		
 

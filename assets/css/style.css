@@ -251,3 +251,7 @@ select {
 .fcp-setting-field-cc{
     display: none;
 }
+
+.fcp-state-field-wrap-admin{
+    width: 50%;
+}
