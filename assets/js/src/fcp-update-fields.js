@@ -151,6 +151,7 @@ function fcp_update_specimen_fields_with_settings_and_create_json() {
             }
             var settings =  all_fields[existing_index].settings
             field.find('.fcp-adress-label-admin').text(settings.label)
+            
             if(settings.street_address === false){
                 field.find('.street-address-admin-wrap').hide()
             }else{

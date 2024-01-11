@@ -5,8 +5,7 @@ function fcp_field_settings_handler() {
 
 	$(document).on("click", '.fcp-popup-icon', function (e) {
 		e.preventDefault();
-		var field_id = $(this).closest('.fcp-single-field-wrap').data('id') 
-		alert(field_id)
+		var field_id = $(this).closest('.fcp-single-field-wrap').data('id');
 		var setting_for = $(this).closest('.fcp-mini-setting-bar').attr('data-settings');
 		var data_of_the_field = fcp_get_data_from_object(field_id)
 		$('.fcp-setting-field-cc').hide()
@@ -19,7 +18,9 @@ function fcp_field_settings_handler() {
 			$('.fcp-label-admin-wrap').show()		
 
 			$('.fcp-label-val-admin').val(settings.label)
-			$('.fcp-placeholder-val-admin').val(settings.placeholer)
+
+			console.log(settings)
+			$('.fcp-placeholder-val-admin').val(settings.placeholder)
 			$('.fcp-req-val-admin').prop('checked', settings.required)
 
 		} else if (setting_for === "number" && data_of_the_field.field_type === "number") {
@@ -29,7 +30,7 @@ function fcp_field_settings_handler() {
 			$('.fcp-label-admin-wrap').show()
 			$('.fcp-min--max-admin-wrap').show()			
 
-			$('.fcp-placeholder-val-admin').val(settings.placeholer)
+			$('.fcp-placeholder-val-admin').val(settings.placeholder)
 			$('.fcp-label-val-admin').val(settings.label)
 			$('.fcp-req-val-admin').prop('checked', settings.required)
 			$('.fcp-min-num-val-admin').val(settings.min_val)
@@ -42,7 +43,7 @@ function fcp_field_settings_handler() {
 			$('.fcp-label-admin-wrap').show()
 
 			$('.fcp-label-val-admin').val(settings.label)
-			$('.fcp-placeholder-val-admin').val(settings.placeholer)
+			$('.fcp-placeholder-val-admin').val(settings.placeholder)
 			$('.fcp-req-val-admin').prop('checked', settings.required)
 
 		} else if (setting_for === "name" && data_of_the_field.field_type === "name") {
@@ -90,7 +91,7 @@ function fcp_field_settings_handler() {
 			$('.fcp-label-admin-wrap').show()
 			
 			$('.fcp-label-val-admin').val(settings.label)
-			$('.fcp-placeholder-val-admin').val(settings.placeholer)
+			$('.fcp-placeholder-val-admin').val(settings.placeholder)
 
 		} else if (setting_for === "textarea") {
 

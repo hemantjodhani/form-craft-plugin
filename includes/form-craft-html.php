@@ -34,11 +34,17 @@ $fcp_all_input_types = InputTypes::get_all_input_types()
 </div>
 <?php
 	$data = get_post_meta( $post->ID, 'form-json' );
-	if ( ! empty( $data ) ) {
-		$json_string = json_encode( $data );
-	}
+if ( ! empty( $data ) ) {
+	$json_string = json_encode( $data );
+}
 ?>
-<input type="hidden" class="fcp-json-hidden-field" name="fcp_json_data" value="<?php print_r( esc_attr($json_string) ); ?>">
+<input type="hidden" class="fcp-json-hidden-field" name="fcp_json_data" value="
+<?php
+if ( ! empty( $json_string ) ) {
+	printf( esc_attr( $json_string ) ); }
+?>
+">
+
 <div class="fcp-form-submit-specimen">Submit</div>
 <div id="first-popup" class="mfp-hide white-popup">
 	<form class="fcp--field-settings--form">
