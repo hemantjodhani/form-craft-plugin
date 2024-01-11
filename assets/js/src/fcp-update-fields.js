@@ -1,6 +1,7 @@
 const $ = jQuery;
 import all_fields from "./fcp-global-variables";
 import fcp_get_data_from_object from './fcp-data-provider'
+import fcp_hidden_field_data_updater from './fcp-hidden-field-data'
 function fcp_update_specimen_fields_with_settings_and_create_json() {
     var field = "";
     var setting_field_type = ""
@@ -240,6 +241,7 @@ function fcp_update_specimen_fields_with_settings_and_create_json() {
         }
 
         jQuery.magnificPopup.close()
+        fcp_hidden_field_data_updater()
 
     })
 
@@ -252,6 +254,7 @@ function fcp_update_specimen_fields_with_settings_and_create_json() {
             all_fields.splice(index_to_remove, 1);
         }
         $(this).closest('.fcp-single-field-wrap').remove();
+        fcp_hidden_field_data_updater()
     });
 
 }

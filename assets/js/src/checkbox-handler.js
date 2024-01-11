@@ -1,6 +1,7 @@
 var $ = jQuery;
 import all_fields from "./fcp-global-variables";
 import fcp_checkbox_id_generator from "./fcp-checkbox-id";
+import fcp_hidden_field_data_updater from './fcp-hidden-field-data'
 function fcp_checkbox_events_handler() {
 
     var checkbox_id = ""
@@ -15,7 +16,7 @@ function fcp_checkbox_events_handler() {
         var existing_index = all_fields.findIndex(field => field.fieldID === field_id);
         var existing_box = all_fields[existing_index].options.findIndex(field => field.option_id === checkbox_id)
         all_fields[existing_index].options[existing_box].value = checkbox_value
-
+        fcp_hidden_field_data_updater()
     });
 
     $(".fcp-add-more-checkbox-btn").click(function(e){      
@@ -36,6 +37,7 @@ function fcp_checkbox_events_handler() {
             var new_option_index = all_fields[existing_index].options.length - 1;
 
             $('.fcp-checkboxes-admin').append(`<li data-id=${all_fields[existing_index].options[new_option_index].option_id}><input type="text" value="${all_fields[existing_index].options[new_option_index].value}" class="fcp-checkbox--val--admin"> <span>X</span></li>`);
+            fcp_hidden_field_data_updater()
         }    
     });
 
@@ -50,9 +52,9 @@ function fcp_checkbox_events_handler() {
            all_fields[existing_index].options.splice(checkbox_to_remove, 1);
        } 
 
-       console.log(all_fields)
        $(this).parent().remove()
 
+       fcp_hidden_field_data_updater()
     })
 }
 

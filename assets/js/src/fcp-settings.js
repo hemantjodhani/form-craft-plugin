@@ -1,10 +1,12 @@
 const $ = jQuery;
 import fcp_get_data_from_object from './fcp-data-provider'
+import fcp_hidden_field_data_updater from './fcp-hidden-field-data'
 function fcp_field_settings_handler() { 
 
 	$(document).on("click", '.fcp-popup-icon', function (e) {
 		e.preventDefault();
 		var field_id = $(this).closest('.fcp-single-field-wrap').data('id') 
+		alert(field_id)
 		var setting_for = $(this).closest('.fcp-mini-setting-bar').attr('data-settings');
 		var data_of_the_field = fcp_get_data_from_object(field_id)
 		$('.fcp-setting-field-cc').hide()
@@ -100,7 +102,7 @@ function fcp_field_settings_handler() {
 			
 		}
 		
-
+		fcp_hidden_field_data_updater()
 
 		jQuery.magnificPopup.open({
 			items: {

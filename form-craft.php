@@ -23,6 +23,8 @@ class FormCraftPlugin {
 		add_action( 'init', array( $this, 'register_custom_post_type' ) );
 		add_action( 'add_meta_boxes', array( $this, 'fcp_custom_metabox' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_files' ) );
+
+		add_action( 'save_post', array( $this, 'fcp_save_data' ) );
 	}
 
 	public function enqueue_files() {
@@ -76,6 +78,21 @@ class FormCraftPlugin {
 			)
 		);
 	}
+	public function fcp_save_data() {
+		if ( isset( $_POST['fcp_json_data'] ) ) {
+			$post_id = $_POST['post_ID'];
+			$data    = $_POST['fcp_json_data'];
+			// print_r($data) ; exit;
+			$data = json_decode(wp_unslash($data));
+			// echo '<pre>';
+			// print_r($data) ; 
+			// echo '</pre>';
+			// exit;
+			update_post_meta( $post_id, 'form-json', $data );
+		}
+	}
 }
+
+
 
 FormCraftPlugin::plugin_init();

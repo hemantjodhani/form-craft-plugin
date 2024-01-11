@@ -1,6 +1,7 @@
 const $ = jQuery;
 import all_fields from "./fcp-global-variables";
 import fcp_checkbox_id_generator from './fcp-checkbox-id'
+import fcp_hidden_field_data_updater from './fcp-hidden-field-data'
 function fcp_field_appender_admin() {
     var data = {}
     function fcp_field_id_generator() {
@@ -168,6 +169,9 @@ function fcp_field_appender_admin() {
 
             $('.fcp-form-fields-wrapper').append(TEXTAREA);
         }
+
+        fcp_hidden_field_data_updater()
+        
     });
 }
 

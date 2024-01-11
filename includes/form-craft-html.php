@@ -15,7 +15,7 @@ $fcp_all_input_types = InputTypes::get_all_input_types()
 	<div class="fcp-form-area">
 		<form method="post">
 			<div class="fcp-form-fields-wrapper" data-path="<?php echo FORM_CRAFT_PLUGIN_URL; ?>">
-
+				
 			</div>
 		</form>
 	</div>
@@ -32,6 +32,13 @@ $fcp_all_input_types = InputTypes::get_all_input_types()
 		?>
 	</div>
 </div>
+<?php
+	$data = get_post_meta( $post->ID, 'form-json' );
+	if ( ! empty( $data ) ) {
+		$json_string = json_encode( $data );
+	}
+?>
+<input type="hidden" class="fcp-json-hidden-field" name="fcp_json_data" value="<?php print_r( esc_attr($json_string) ); ?>">
 <div class="fcp-form-submit-specimen">Submit</div>
 <div id="first-popup" class="mfp-hide white-popup">
 	<form class="fcp--field-settings--form">
@@ -140,9 +147,6 @@ $fcp_all_input_types = InputTypes::get_all_input_types()
 
 			<div class="fcp-checkboxes-admin-wrap fcp-setting-field-cc">
 				<ul class="fcp-checkboxes-admin">
-					<!-- <li><input type="text" value="Option 1"> <span>X</span></li>
-					<li><input type="text" value="Option 2"> <span>X</span></li>
-					<li><input type="text" value="Option 3"> <span>X</span></li> -->
 				</ul>
 				<button class="fcp-add-more-checkbox-btn">+ Add more checkboxes</button>
 			</div>
@@ -151,4 +155,3 @@ $fcp_all_input_types = InputTypes::get_all_input_types()
 		<input type="submit" value="Save changes" class="fcp-form-submit-specimen fcp-submit-settings-admin">
 	</form>
 </div>
-
