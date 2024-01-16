@@ -4,7 +4,7 @@ import all_fields from "./fcp-global-variables";
 function fcp_json_to_html_convertor() {
 
 	var data_from_php = $(".fcp-json-hidden-field").val();
-	if (data_from_php) {
+	if (data_from_php !== "") {
 
 		var obj = JSON.parse(data_from_php);
 

@@ -255,3 +255,11 @@ select {
 .fcp-state-field-wrap-admin{
     width: 50%;
 }
+
+.fcp-shortcode-view{
+    width: 100%;
+    background: none !important;
+    border: none!important;
+    box-shadow: none!important;
+    color: black!important;
+}
