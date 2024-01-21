@@ -25,6 +25,65 @@ class FormCraftPlugin {
 		add_action( 'add_meta_boxes', array( $this, 'fcp_custom_metabox_shortcode' ) );
 		add_action( 'save_post', array( $this, 'fcp_save_data' ) );
 		add_shortcode( 'form_craft', array( $this, 'fcp_front_end_form' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'fcp_fe_style' ) );
+		add_action( 'init', array( $this, 'fcp_form_submission_handler' ) );
+		add_action( 'admin_menu', array( $this, 'fcp_custom_entries_menu' ) );
+
+	}
+
+	public function fcp_custom_entries_menu() {
+        add_submenu_page(
+            'edit.php?post_type=form-craft',  
+            'Form Craft Entries',    
+            'Entries',                 
+            'manage_options',                  
+            'form-craft-entries',              
+            array( $this, 'fcp_entries_page' ) 
+        );
+    }
+
+	public function fcp_entries_page() {
+		include 'form-craft-entries.php';
+    }
+
+	public function fcp_fe_style(){
+		if(!is_admin()){
+			wp_enqueue_style('fcp-fe-style', plugin_dir_url(__FILE__) . 'assets/css/fcp-fe.css', array(), '1.0');
+		}
+	}
+
+	public function fcp_form_submission_handler(){
+		global $wpdb;
+		$_all_entries = array();
+		if(isset($_GET['form_submission'])){
+			$form_id = $_POST['fcp_form_id'];
+			$data = get_post_meta( $form_id, 'form-json');
+			$fields = $data[0];
+			foreach($fields as $field){
+				$field_id = $field->fieldID;
+				$field_label = $field->settings->label;
+				$field_type = $field->field_type;
+				$field_value = $_POST[$field_id];
+	
+				$_all_entries[] = array(
+					'label' => $field_label,
+					'type' => $field_type,
+					'value' => $field_value
+				);
+			}
+			$table_name = $wpdb->prefix . 'form_craft_entries';
+			$_all_entries = json_encode($_all_entries);
+			$wpdb->insert( 
+				$table_name, 
+				array( 
+					'form_id' => $form_id, 
+					'entry' => $_all_entries,  
+				) 
+			);
+			$redirect_url = add_query_arg('confirm', '1', wp_get_referer());
+			wp_redirect($redirect_url);
+			exit;
+		}
 	}
 
 	public function enqueue_files() {
@@ -35,6 +94,7 @@ class FormCraftPlugin {
 		wp_enqueue_style( 'fcp-main-style', plugin_dir_url( __FILE__ ) . 'assets/css/style.css', array(), '1.0' );
 		wp_enqueue_style( 'fcp-mgpp-style', plugin_dir_url( __FILE__ ) . 'assets/js/Magnific-Popup-master/dist/magnific-popup.css', array(), '1.0' );
 		wp_enqueue_script( 'fcp-mgpp-script', plugin_dir_url( __FILE__ ) . 'assets/js/Magnific-Popup-master/dist/jquery.magnific-popup.js', array( 'jquery' ), '1.0', true );
+
 	}
 	public function fcp_custom_metabox_shortcode() {
 		$screens = array( 'form-craft' );
@@ -84,7 +144,24 @@ class FormCraftPlugin {
 
 	public function activate_plugin() {
 		$this->register_custom_post_type();
+		$this->create_entries_table();
 	}
+
+	private function create_entries_table() {
+		global $wpdb;
+		$charset_collate = $wpdb->get_charset_collate();
+	
+		$sql = "CREATE TABLE {$wpdb->prefix}form_craft_entries (
+			entry_id int NOT NULL AUTO_INCREMENT,
+			form_id int NOT NULL,
+			entry text NOT NULL,
+			PRIMARY KEY  (entry_id)
+		) $charset_collate;";
+	
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		dbDelta($sql);
+	}
+	
 
 	public function register_custom_post_type() {
 		register_post_type(
@@ -118,30 +195,46 @@ class FormCraftPlugin {
 
 		}
 	}
-	public function fcp_front_end_form( $attr ) {
+
+	public function fcp_all_countries() {
+		$countries = ['Afghanistan', 'Åland Islands', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bangladesh', 'Barbados', 'Bahamas', 'Bahrain', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil', 'British Indian Ocean Territory', 'British Virgin Islands', 'Brunei Darussalam', 'Bulgaria', 'Burkina Faso', 'Burma', 'Burundi', 'Cambodia', 'Cameroon', 'Canada', 'Cape Verde', 'Cayman Islands', 'Central African Republic', 'Chad', 'Chile', 'China', 'Christmas Island', 'Cocos (Keeling) Islands', 'Colombia', 'Comoros', 'Congo-Brazzaville', 'Congo-Kinshasa', 'Cook Islands', 'Costa Rica', 'Croatia', 'Curaçao', 'Cyprus', 'Czech Republic', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'East Timor', 'Ecuador', 'El Salvador', 'Egypt', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Ethiopia', 'Falkland Islands', 'Faroe Islands', 'Federated States of Micronesia', 'Fiji', 'Finland', 'France', 'French Guiana', 'French Polynesia', 'French Southern Lands', 'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guadeloupe', 'Guam', 'Guatemala', 'Guernsey', 'Guinea', 'Guinea-Bissau', 'Guyana', 'Haiti', 'Heard and McDonald Islands', 'Honduras', 'Hong Kong', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iraq', 'Ireland', 'Isle of Man', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jersey', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', 'Kuwait', 'Kyrgyzstan', 'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Macau', 'Macedonia', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Martinique', 'Mauritania', 'Mauritius', 'Mayotte', 'Mexico', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'New Caledonia', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Niue', 'Norfolk Island', 'Northern Mariana Islands', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Pitcairn Islands', 'Poland', 'Portugal', 'Puerto Rico', 'Qatar', 'Réunion', 'Romania', 'Russia', 'Rwanda', 'Saint Barthélemy', 'Saint Helena', 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Martin', 'Saint Pierre and Miquelon', 'Saint Vincent', 'Samoa', 'San Marino', 'São Tomé and Príncipe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Sint Maarten', 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'South Georgia', 'South Korea', 'Spain', 'Sri Lanka', 'Sudan', 'Suriname', 'Svalbard and Jan Mayen', 'Sweden', 'Swaziland', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', 'Togo', 'Tokelau', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Turks and Caicos Islands', 'Tuvalu', 'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City', 'Vietnam', 'Venezuela', 'Wallis and Futuna', 'Western Sahara', 'Yemen', 'Zambia', 'Zimbabwe'];
+		return $countries;
+	}
+	public function fcp_front_end_form( $attr , $form_title ) {
 
 		ob_start();
+		print_r( $form_title );
 		$post_id    = $attr['id'];
-		$data       = get_post_meta( $post_id, 'form-json' );
+		$data       = get_post_meta( $post_id, 'form-json');
 		$all_fields = $data[0];
 		if ( ! empty( $all_fields ) ) {
 			echo "<div class='fcp-fe-form-wrap'>";
-			echo "<form method='post'>";
+			echo '<form method="post" action="' . site_url() . '/?form_submission=1">';
 			echo '<input type="hidden" name="fcp_form_id"value=' . "$post_id" . '>';
 			foreach ( $all_fields as $field ) {
 
-					$settings    = $field->settings;
-					$label       = $settings->label;
-					$required    = $settings->required;
-					if(!empty($settings->placeholder)){
+				$placeholder = "";
+				$required = "";
+				$label = "";
+				$settings = $field->settings;
+
+				if(!empty($settings->placeholder)){
 						$placeholder = $settings->placeholder;
+					}
+
+					if(!empty($settings->required)){
+						$required = $settings->required;
+					}
+
+					if(!empty($settings->label)){
+						$label       = $settings->label;
 					}
 
 				if ( 'text' === $field->field_type ) {
 					?>
 						<div class='fcp-fe-field-wrap fcp-fe-text-field'>
 							<label for='<?php echo $label; ?>'><?php echo $label; ?></label>
-							<input type='text' id='<?php echo $label; ?>' name='fcp_text_field' <?php if($required){echo "required";}?> placeholder="<?php echo $placeholder ; ?>">
+							<input type='text' id='<?php echo $label; ?>' name='<?php echo $field->fieldID ; ?>' <?php if($required){echo "required";}?> placeholder="<?php echo $placeholder ; ?>">
 						</div>
 					<?php
 				} elseif ( 'number' === $field->field_type ) {
@@ -150,7 +243,7 @@ class FormCraftPlugin {
 					?>
 						<div class='fcp-fe-field-wrap fcp-fe-num-field'>
 							<label for='<?php echo $label; ?>'><?php echo $label; ?></label>
-							<input type='number' id='<?php echo $label; ?>' name='fcp_num_field' <?php if($required){echo "required";}?> placeholder="<?php echo $placeholder ; ?>" min="<?php echo $min_val ?>" max="<?php echo $max_val ?>">
+							<input type='number' id='<?php echo $label; ?>' name='<?php echo $field->fieldID ; ?>' <?php if($required){echo "required";}?> placeholder="<?php echo $placeholder ; ?>" min="<?php echo $min_val ?>" max="<?php echo $max_val ?>">
 						</div>
 					<?php
 
@@ -158,7 +251,7 @@ class FormCraftPlugin {
 					?>
 						<div class='fcp-fe-field-wrap fcp-fe-email-field'>
 							<label for='<?php echo $label; ?>'><?php echo $label; ?></label>
-							<input type='email' id='<?php echo $label; ?>' name='fcp_email_field' <?php if($required){echo "required";}?> placeholder="<?php echo $placeholder ; ?>">
+							<input type='email' id='<?php echo $label; ?>' name='<?php echo $field->fieldID ; ?>' <?php if($required){echo "required";}?> placeholder="<?php echo $placeholder ; ?>">
 						</div>
 					<?php
 
@@ -172,12 +265,12 @@ class FormCraftPlugin {
 							<div class="fcp-fe--firstname--lastname--wrap">
 								<?php if($first_name){
 									?>
-										<input type='text' name='fcp_first_name_field' <?php if($required){echo "required";}?> placeholder="first name">
+										<input type='text' name='<?php echo $field->fieldID ; ?>[0]' <?php if($required){echo "required";}?> placeholder="First name">
 									<?php
 								} ?>
 								<?php if($last_name){
 									?>
-										<input type='text' name='fcp_last_name_field' <?php if($required){echo "required";}?> placeholder="last name">
+										<input type='text' name='<?php echo $field->fieldID ; ?>[1]' <?php if($required){echo "required";}?> placeholder="Last name">
 									<?php	
 									}
 								?>
@@ -185,26 +278,136 @@ class FormCraftPlugin {
 						</div>
 					<?php
 				} elseif ( 'address' === $field->field_type ) {
-					$street_adress = $field->settings->street_address;
-					$address_line_2 = $field->settings->address_line_2;
-					$city = $field->settings->city;
-					$state = $field->settings->state;
-					$country = $field->settings->country;
-					$zip_code = $field->settings->zip_close;
-					// Wrap fields in a div to allow styling of the address
+					$street_adress    = $field->settings->street_address;
+					$address_line_2   = $field->settings->address_line_2;
+					$city 			  = $field->settings->city;
+					$state            = $field->settings->state;
+					$country          = $field->settings->country;
+					$zip_code         = $field->settings->zip_code;
+					
+					?>
+						<div class='fcp-fe-field-wrap fcp-fe-address-field'>
+							
+							<label class="fcp-fe-address--label" for='<?php echo $label; ?>'><?php echo $label; ?></label>
+							
+							<?php if($street_adress){?>
+								<div class="fcp-fe-stad-wrap" >
+									<label for="street-fcp-fe--address">Street Address</label>
+									<input type="text" id="street-fcp-fe--address" <?php if($required){echo "required";} ?> name="<?php echo $field->fieldID ; ?>[0]">
+								</div>
+							<?php } ?>
+
+							<?php if($address_line_2){?>
+								<div class="fcp-fe-stad-wrap fcp-fe-adli_two-wrap" >
+									<label for="adress_line_two">Address Line 2</label>
+									<input type="text" id="adress_line_two" <?php if($required){echo "required";} ?> name="<?php echo $field->fieldID ; ?>[1]">
+								</div>
+							<?php } ?>
+
+							<div class="fcp-fe-city--state-wrap">
+								<?php if($city){?>
+									<div class="fcp-fe-stad-wrap fcp-fe-city-wrap" >
+										<label for="city">City</label>
+										<input type="text" id="city" <?php if($required){echo "required";} ?> name="<?php echo $field->fieldID ; ?>[2]">
+									</div>
+								<?php } ?>
+
+								<?php if($state){?>
+									<div class="fcp-fe-stad-wrap fcp-fe-state-wrap" >
+										<label for="state">State</label>
+										<input type="text" id="state" <?php if($required){echo "required";} ?> name="<?php echo $field->fieldID ; ?>[3]">
+									</div>
+								<?php } ?>
+							</div>
+
+							<div class="fcp-fe-zip--country-wrap">
+								
+								<?php if($zip_code){?>
+									<div class="fcp-fe-stad-wrap fcp-fe-zip_code-wrap" >
+										<label for="zip_code">Zip code</label>
+										<input type="number" id="zip_code" <?php if($required){echo "required";} ?> name="<?php echo $field->fieldID ; ?>[4]">
+									</div>
+								<?php } ?>
+
+								<?php if($country){?>
+									<div class="fcp-fe-stad-wrap fcp-fe-country-wrap" >
+										<label for="country">Country</label>
+
+										<select id="country" name="<?php echo $field->fieldID ; ?>[5]">
+											<?php
+												$countries = $this->fcp_all_countries();
+												foreach($countries as $country){
+													?> 
+														<option value="<?php echo $country ; ?>"><?php echo $country ; ?></option>
+													<?php
+												}
+											?>
+										</select>
+
+									</div>
+								<?php } ?>	
+
+							</div>
+							
+
+						</div>
+					<?php
+					?>
+					<?php
 					?>
 
 					<?php
 				} elseif ( 'checkbox' === $field->field_type ) {
+					$options = $field->options;
+					?>
+
+						<div class='fcp-fe-field-wrap fcp-fe-checkbox-field'>
+							<label for='<?php echo $label; ?>'><?php echo $label; ?></label>
+							
+							<ul class="fcp-fe-checboxes-wrap">
+								<?php foreach( $options as $option){
+									?>
+										<li>
+											<div class="checkbox-wrapper-2">
+												<input type="checkbox" id="<?php echo $option->option_id ?>" name="<?php echo $field->fieldID ; ?>[]" value="<?php echo $option->value ; ?>" class="sc-gJwTLC ikxBAC">
+											</div>	
+											<label for="<?php echo $option->option_id ?>"><?php echo $option->value ; ?></label>
+										</li>
+									<?php
+								}
+								?>
+							</ul>
+						</div>
+
+					<?php
+						
 
 				} elseif ( 'password' === $field->field_type ) {
 
-				} elseif ( 'textarea' === $field->field_type ) {
+					?>
 
+						<div class='fcp-fe-field-wrap fcp-fe-password-field'>
+							<label for='<?php echo $label; ?>'><?php echo $label; ?></label>
+							<input type='password' id='<?php echo $label; ?>' name='<?php echo $field->fieldID ; ?>' required placeholder="<?php echo $placeholder ; ?>">
+						</div>
+						
+					<?php
+
+				} elseif ( 'textarea' === $field->field_type ) {
+					// print_r($field);
+
+					?>
+					<div class='fcp-fe-field-wrap fcp-fe-textarea-field-wrap'>
+						<label for='<?php echo $label; ?>'><?php echo $label; ?></label>
+						<textarea id="<?php echo $label; ?>" name="<?php echo $field->fieldID ; ?>" <?php if($required){echo "required";} ?> rows="10"></textarea>
+					</div>
+					<?php
 				}
-				echo '</form>';
-				echo '</div>';
 			}
+			
+			echo '<input type="submit" class="fcp-fe-submit-btn" name="fcp-fe-form-submit">';
+			echo '</form>';
+			echo '</div>';
 			return ob_get_clean();
 		}
 	}
