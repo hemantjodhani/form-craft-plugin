@@ -28,7 +28,16 @@ class FormCraftPlugin {
 		add_action( 'wp_enqueue_scripts', array( $this, 'fcp_fe_style' ) );
 		add_action( 'init', array( $this, 'fcp_form_submission_handler' ) );
 		add_action( 'admin_menu', array( $this, 'fcp_custom_entries_menu' ) );
+		add_action( 'add_meta_boxes', array( $this, 'fcp_confirmation_message' ) );
+		add_action( 'save_post', array( $this, 'fcp_save_confirmation_message' ) );
+	}
 
+	public function fcp_save_confirmation_message(){
+		if(isset($_POST['fcp_form_confirm'])){
+			$post_id = $_POST['post_ID'];
+			update_post_meta( $post_id, 'fcp_form_confirmation', $_POST['fcp_form_confirm']);
+
+		}
 	}
 
 	public function fcp_custom_entries_menu() {
@@ -108,6 +117,26 @@ class FormCraftPlugin {
 				'low'
 			);
 		}
+	}
+
+	public function fcp_confirmation_message(){
+		$screens = array( 'form-craft' );
+		foreach ( $screens as $screen ) {
+			add_meta_box(
+				'vyKshwp',                 // Unique ID
+				'Confirmation message',      // Box title
+				array( $this, 'fcp_metabox_confirm_html' ),  // Content callback, must be of type callable
+				$screen,                           // Post type
+				'side',
+			);
+		}
+	}
+
+	public function fcp_metabox_confirm_html( $attr ){
+		$message = get_post_meta( $attr->ID , 'fcp_form_confirmation', true );
+		?>
+			<input type="text" name="fcp_form_confirm" value="<?php echo esc_attr( $message ); ?>">
+		<?php
 	}
 
 	public function fcp_metabox_shortcode_html( $post ) {
@@ -200,16 +229,27 @@ class FormCraftPlugin {
 		$countries = ['Afghanistan', 'Åland Islands', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bangladesh', 'Barbados', 'Bahamas', 'Bahrain', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil', 'British Indian Ocean Territory', 'British Virgin Islands', 'Brunei Darussalam', 'Bulgaria', 'Burkina Faso', 'Burma', 'Burundi', 'Cambodia', 'Cameroon', 'Canada', 'Cape Verde', 'Cayman Islands', 'Central African Republic', 'Chad', 'Chile', 'China', 'Christmas Island', 'Cocos (Keeling) Islands', 'Colombia', 'Comoros', 'Congo-Brazzaville', 'Congo-Kinshasa', 'Cook Islands', 'Costa Rica', 'Croatia', 'Curaçao', 'Cyprus', 'Czech Republic', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'East Timor', 'Ecuador', 'El Salvador', 'Egypt', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Ethiopia', 'Falkland Islands', 'Faroe Islands', 'Federated States of Micronesia', 'Fiji', 'Finland', 'France', 'French Guiana', 'French Polynesia', 'French Southern Lands', 'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guadeloupe', 'Guam', 'Guatemala', 'Guernsey', 'Guinea', 'Guinea-Bissau', 'Guyana', 'Haiti', 'Heard and McDonald Islands', 'Honduras', 'Hong Kong', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iraq', 'Ireland', 'Isle of Man', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jersey', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', 'Kuwait', 'Kyrgyzstan', 'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Macau', 'Macedonia', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Martinique', 'Mauritania', 'Mauritius', 'Mayotte', 'Mexico', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'New Caledonia', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Niue', 'Norfolk Island', 'Northern Mariana Islands', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Pitcairn Islands', 'Poland', 'Portugal', 'Puerto Rico', 'Qatar', 'Réunion', 'Romania', 'Russia', 'Rwanda', 'Saint Barthélemy', 'Saint Helena', 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Martin', 'Saint Pierre and Miquelon', 'Saint Vincent', 'Samoa', 'San Marino', 'São Tomé and Príncipe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Sint Maarten', 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'South Georgia', 'South Korea', 'Spain', 'Sri Lanka', 'Sudan', 'Suriname', 'Svalbard and Jan Mayen', 'Sweden', 'Swaziland', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', 'Togo', 'Tokelau', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Turks and Caicos Islands', 'Tuvalu', 'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City', 'Vietnam', 'Venezuela', 'Wallis and Futuna', 'Western Sahara', 'Yemen', 'Zambia', 'Zimbabwe'];
 		return $countries;
 	}
-	public function fcp_front_end_form( $attr , $form_title ) {
+	public function fcp_front_end_form( $attr ) {
 
 		ob_start();
-		print_r( $form_title );
+
 		$post_id    = $attr['id'];
-		$data       = get_post_meta( $post_id, 'form-json');
+		$data       = get_post_meta( $post_id, 'form-json' , true);
 		$all_fields = $data[0];
 		if ( ! empty( $all_fields ) ) {
 			echo "<div class='fcp-fe-form-wrap'>";
-			echo '<form method="post" action="' . site_url() . '/?form_submission=1">';
+
+			if(isset($_GET['confirm'])){
+				
+				$confirm_message = get_post_meta( $post_id , 'fcp_form_confirmation', true );
+				if ( $confirm_message == "" ){
+					$confirm_message = "Form submitted successfully...";
+				}
+				?>
+					<span><?php echo $confirm_message; ?></span>
+				<?php
+			}
+			echo '<form method="post" action="' . site_url() . '/?form_submission=1" ' . (isset($_GET['confirm']) ? 'style="display:none;"' : '') . '>';
 			echo '<input type="hidden" name="fcp_form_id"value=' . "$post_id" . '>';
 			foreach ( $all_fields as $field ) {
 
@@ -227,7 +267,7 @@ class FormCraftPlugin {
 					}
 
 					if(!empty($settings->label)){
-						$label       = $settings->label;
+						$label = $settings->label;
 					}
 
 				if ( 'text' === $field->field_type ) {
@@ -394,7 +434,6 @@ class FormCraftPlugin {
 					<?php
 
 				} elseif ( 'textarea' === $field->field_type ) {
-					// print_r($field);
 
 					?>
 					<div class='fcp-fe-field-wrap fcp-fe-textarea-field-wrap'>

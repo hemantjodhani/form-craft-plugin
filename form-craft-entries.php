@@ -153,8 +153,6 @@ if ( isset( $_POST['get_entries'] ) ) {
 				</tbody>			
 			</table>
 		<?php
-	} else {
-		echo 'Please select an entry.';
 	}
 }
 ?>
