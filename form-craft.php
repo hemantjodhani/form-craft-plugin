@@ -115,9 +115,11 @@ class FormCraftPlugin {
 		?>
 
 		<div class="fcp-shortcode--clipboard-wrap">
-			<input type="text" name="" id="" disabled class="fcp-shortcode-view" value="<?php echo esc_attr( "[form_craft id='{$post->ID}']" ); ?>">
-			<img src="<?php echo FORM_CRAFT_PLUGIN_URL; ?>/assets/icons/paste.png" alt="">
-			<span>Short code copied .....</span>
+			<div class="fcp-shortcode-btn-field-wrap">
+				<input type="text" name="" id="" disabled class="fcp-shortcode-view" value="<?php echo esc_attr( "[form_craft id='{$post->ID}']" ); ?>">
+				<img src="<?php echo FORM_CRAFT_PLUGIN_URL; ?>/assets/icons/paste.png" alt="">
+			</div>
+			<span class="fcp-scc-message">Shortcode copied ✅</span>
 		</div>
 
 		<?php

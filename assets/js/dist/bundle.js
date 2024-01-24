@@ -30,6 +30,16 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
+/***/ "./src/fcp-clipboard.js":
+/*!******************************!*\
+  !*** ./src/fcp-clipboard.js ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nfunction fcp_clipboard_handler(){\n\n    function hide_copied_line(){\n        jQuery('.fcp-scc-message').fadeOut();\n    }\n\n    jQuery(document).on('click' , '.fcp-shortcode-btn-field-wrap img' , function(){\n\n        var copy_text = jQuery('.fcp-shortcode-view').val();\n        navigator.clipboard.writeText(copy_text);\n        jQuery('.fcp-scc-message').show();\n        setTimeout(hide_copied_line, 5000)\n\n    })\n\n}\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (fcp_clipboard_handler);\n\n\n//# sourceURL=webpack://js/./src/fcp-clipboard.js?");
+
+/***/ }),
+
 /***/ "./src/fcp-data-provider.js":
 /*!**********************************!*\
   !*** ./src/fcp-data-provider.js ***!
@@ -106,7 +116,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _fcp_fields__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./fcp-fields */ \"./src/fcp-fields.js\");\n/* harmony import */ var _fcp_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fcp-settings */ \"./src/fcp-settings.js\");\n/* harmony import */ var _fcp_update_fields__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./fcp-update-fields */ \"./src/fcp-update-fields.js\");\n/* harmony import */ var _checkbox_handler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./checkbox-handler */ \"./src/checkbox-handler.js\");\n/* harmony import */ var _fcp_json_html__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./fcp-json-html */ \"./src/fcp-json-html.js\");\n\n\n\n\n\njQuery(document).ready(function ($) {\n\n    (0,_fcp_json_html__WEBPACK_IMPORTED_MODULE_4__[\"default\"])()\n    ;(0,_fcp_fields__WEBPACK_IMPORTED_MODULE_0__[\"default\"])()\n    ;(0,_fcp_settings__WEBPACK_IMPORTED_MODULE_1__[\"default\"])();\n    // alert()\n    $(\".post-type-form-craft .titlewrap input\").attr(\"required\", true);\n    \n    $( \".fcp-form-fields-wrapper\" ).sortable({\n        placeholder: \"ui-state-highlight\",\n        connectWith: \".fcp-form-fields-wrapper\"\n    })\n    \n    ;(0,_fcp_update_fields__WEBPACK_IMPORTED_MODULE_2__[\"default\"])()\n    ;(0,_checkbox_handler__WEBPACK_IMPORTED_MODULE_3__[\"default\"])()\n});\n\n//# sourceURL=webpack://js/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _fcp_fields__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./fcp-fields */ \"./src/fcp-fields.js\");\n/* harmony import */ var _fcp_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fcp-settings */ \"./src/fcp-settings.js\");\n/* harmony import */ var _fcp_update_fields__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./fcp-update-fields */ \"./src/fcp-update-fields.js\");\n/* harmony import */ var _checkbox_handler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./checkbox-handler */ \"./src/checkbox-handler.js\");\n/* harmony import */ var _fcp_json_html__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./fcp-json-html */ \"./src/fcp-json-html.js\");\n/* harmony import */ var _fcp_clipboard__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./fcp-clipboard */ \"./src/fcp-clipboard.js\");\n\n\n\n\n\n\njQuery(document).ready(function ($) {\n\n    (0,_fcp_json_html__WEBPACK_IMPORTED_MODULE_4__[\"default\"])()\n    ;(0,_fcp_fields__WEBPACK_IMPORTED_MODULE_0__[\"default\"])()\n    ;(0,_fcp_settings__WEBPACK_IMPORTED_MODULE_1__[\"default\"])();\n    (0,_fcp_clipboard__WEBPACK_IMPORTED_MODULE_5__[\"default\"])()\n    $( \".fcp-form-fields-wrapper\" ).sortable({\n        placeholder: \"ui-state-highlight\",\n        connectWith: \".fcp-form-fields-wrapper\"\n    })\n    \n    ;(0,_fcp_update_fields__WEBPACK_IMPORTED_MODULE_2__[\"default\"])()\n    ;(0,_checkbox_handler__WEBPACK_IMPORTED_MODULE_3__[\"default\"])()\n});\n\n//# sourceURL=webpack://js/./src/index.js?");
 
 /***/ })
 

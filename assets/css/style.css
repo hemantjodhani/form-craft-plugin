@@ -262,6 +262,7 @@ select {
     border: none!important;
     box-shadow: none!important;
     color: black!important;
+    padding: 0!important;
 }
 
 .fcp-admin-entries-form{
@@ -285,6 +286,7 @@ select {
     margin-top: 30px;
 }
 
+
 /* Style the table header */
 .fcp-entries-admin-table th, td {
     padding: 12px;
@@ -296,6 +298,26 @@ th {
     background-color: #f2f2f2;
 }
 
+.fcp-shortcode-btn-field-wrap{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.fcp-shortcode-btn-field-wrap img{
+    width: 30px;
+    cursor: pointer;
+}
+
+.fcp-shortcode--clipboard-wrap{
+    height: 70px;
+}
+
+.fcp-scc-message{
+    color: green;
+    display: none;
+}
 /* Make the table responsive */
 @media screen and (max-width: 600px) {
     .fcp-entries-admin-table {
