@@ -1,4 +1,11 @@
 <h1>Form Craft Entries</h1>
+<?php
+function getCurrentUrl() {
+	$protocol = is_ssl() ? 'https://' : 'http://';
+	return ( $protocol ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+}
+
+?>
 
 <form method="post" action="" class="fcp-admin-entries-form">
 	<?php
@@ -57,6 +64,7 @@ if ( isset( $_POST['get_entries'] ) ) {
 							<?php
 					}
 					?>
+					<th>Delete entry</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -144,15 +152,25 @@ if ( isset( $_POST['get_entries'] ) ) {
 								<?php
 							}
 							?>
-						
+							<td class="delete"><a href="<?php echo getCurrentUrl() . '&delete=' . $result->entry_id; ?>">Delete</a></td> 
 						</tr>
 						<?php
 					}
 					?>
-
+					
 				</tbody>			
 			</table>
 		<?php
 	}
+}
+
+if ( isset( $_GET['delete'] ) ) {
+
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'form_craft_entries';
+	$delete_id  = $_GET['delete'];
+
+	$removefromdb = $wpdb->delete( $table_name, array( 'entry_id' => $delete_id ) );
+
 }
 ?>

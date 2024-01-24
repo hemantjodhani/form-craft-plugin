@@ -28,17 +28,9 @@ class FormCraftPlugin {
 		add_action( 'wp_enqueue_scripts', array( $this, 'fcp_fe_style' ) );
 		add_action( 'init', array( $this, 'fcp_form_submission_handler' ) );
 		add_action( 'admin_menu', array( $this, 'fcp_custom_entries_menu' ) );
-		add_action( 'add_meta_boxes', array( $this, 'fcp_confirmation_message' ) );
-		add_action( 'save_post', array( $this, 'fcp_save_confirmation_message' ) );
+
 	}
 
-	public function fcp_save_confirmation_message(){
-		if(isset($_POST['fcp_form_confirm'])){
-			$post_id = $_POST['post_ID'];
-			update_post_meta( $post_id, 'fcp_form_confirmation', $_POST['fcp_form_confirm']);
-
-		}
-	}
 
 	public function fcp_custom_entries_menu() {
         add_submenu_page(
@@ -119,26 +111,6 @@ class FormCraftPlugin {
 		}
 	}
 
-	public function fcp_confirmation_message(){
-		$screens = array( 'form-craft' );
-		foreach ( $screens as $screen ) {
-			add_meta_box(
-				'vyKshwp',                 // Unique ID
-				'Confirmation message',      // Box title
-				array( $this, 'fcp_metabox_confirm_html' ),  // Content callback, must be of type callable
-				$screen,                           // Post type
-				'side',
-			);
-		}
-	}
-
-	public function fcp_metabox_confirm_html( $attr ){
-		$message = get_post_meta( $attr->ID , 'fcp_form_confirmation', true );
-		?>
-			<input type="text" name="fcp_form_confirm" value="<?php echo esc_attr( $message ); ?>">
-		<?php
-	}
-
 	public function fcp_metabox_shortcode_html( $post ) {
 		?>
 
@@ -213,14 +185,30 @@ class FormCraftPlugin {
 		);
 	}
 
+	private function flatten_array($data) {
+		$results = [];
+	
+		foreach ($data as $key => $value) {
+			if (is_array($value) && !empty($value)) {
+				$results = array_merge($results, $this->flatten_array($value));
+			} else {
+				$results[$key] = $value;
+			}
+		}
+	
+		return $results;
+	}
+	
+
 	public function fcp_save_data() {
 		if ( isset( $_POST['fcp_json_data'] ) ) {
 
 			$post_id = $_POST['post_ID'];
 			$data    = $_POST['fcp_json_data'];
-
 			$data = json_decode( wp_unslash( $data ) );
-			update_post_meta( $post_id, 'form-json', $data );
+			$results = [];
+			$results = $this->flatten_array($data);
+			update_post_meta( $post_id, 'form-json', $results );
 
 		}
 	}
@@ -235,7 +223,7 @@ class FormCraftPlugin {
 
 		$post_id    = $attr['id'];
 		$data       = get_post_meta( $post_id, 'form-json' , true);
-		$all_fields = $data[0];
+		$all_fields = $data;
 		if ( ! empty( $all_fields ) ) {
 			echo "<div class='fcp-fe-form-wrap'>";
 
@@ -243,7 +231,7 @@ class FormCraftPlugin {
 				
 				$confirm_message = get_post_meta( $post_id , 'fcp_form_confirmation', true );
 				if ( $confirm_message == "" ){
-					$confirm_message = "Form submitted successfully...";
+					$confirm_message = "Form submitted successfully.";
 				}
 				?>
 					<span><?php echo $confirm_message; ?></span>
@@ -251,9 +239,10 @@ class FormCraftPlugin {
 			}
 			echo '<form method="post" action="' . site_url() . '/?form_submission=1" ' . (isset($_GET['confirm']) ? 'style="display:none;"' : '') . '>';
 			echo '<input type="hidden" name="fcp_form_id"value=' . "$post_id" . '>';
+
 			foreach ( $all_fields as $field ) {
 
-				$placeholder = "";
+				$placeholder = '';
 				$required = "";
 				$label = "";
 				$settings = $field->settings;
@@ -452,4 +441,98 @@ class FormCraftPlugin {
 	}
 }
 
+class fcp_message_handler {
+	private static $init;
+	public static function fcp_message_init() {
+		if ( null === self::$init ) {
+			self::$init = new self();
+		}
+		return self::$init;
+	}
+
+	private function __construct() {
+		add_action( 'add_meta_boxes', array( $this, 'fcp_confirmation_message' ) );
+		add_action( 'save_post', array( $this, 'fcp_save_confirmation_message' ) );
+	}
+
+	public function fcp_save_confirmation_message(){
+		if(isset($_POST['fcp_form_confirm'])){
+			$post_id = $_POST['post_ID'];
+			update_post_meta( $post_id, 'fcp_form_confirmation', $_POST['fcp_form_confirm']);
+		}
+	}
+
+	public function fcp_confirmation_message(){
+		$screens = array( 'form-craft' );
+		foreach ( $screens as $screen ) {
+			add_meta_box(
+				'vyKshwp',                 // Unique ID
+				'Confirmation message',      // Box title
+				array( $this, 'fcp_metabox_confirm_html' ),  // Content callback, must be of type callable
+				$screen,                           // Post type
+				'side',
+			);
+		}
+	}
+
+	public function fcp_metabox_confirm_html( $attr ){
+		$message = get_post_meta( $attr->ID , 'fcp_form_confirmation', true );
+		?>
+			<input type="text" name="fcp_form_confirm" value="<?php echo esc_attr( $message ); ?>" required>
+		<?php
+	}
+}
+
+fcp_message_handler::fcp_message_init();
+
 FormCraftPlugin::plugin_init();
+
+
+
+add_action('edit_form_advanced', 'force_post_title');
+function force_post_title($post) {
+    // List of post types that we want to require post titles for.
+    $post_types = array(
+        'form-craft',
+        // 'report',
+        // 'event',
+        // 'project'
+    );
+
+    // If the current post is not one of the chosen post types, exit this function.
+    if (!in_array($post->post_type, $post_types)) {
+        return;
+    }
+    ?>
+    <script type='text/javascript'>
+        (function ($) {
+            $(document).ready(function () {
+                //Require post title when adding/editing Project Summaries
+                $('body').on('submit.edit-post', '#post', function () {
+                    // If the title isn't set
+                    if ($("#title").val().replace(/ /g, '').length === 0) {
+                        // Show the alert
+                        if (!$("#title-required-msg").length) {
+                            $("#titlewrap")
+                                .append('<div id="title-required-msg"><em>Title is required.</em></div>')
+                                .css({
+                                    "padding": "5px",
+                                    "margin": "5px 0",
+                                    "background": "#ffebe8",
+                                    "border": "1px solid #c00"
+                                });
+                        }
+                        // Hide the spinner
+                        $('#major-publishing-actions .spinner').hide();
+                        // The buttons get "disabled" added to them on submit. Remove that class.
+                        $('#major-publishing-actions').find(':button, :submit, a.submitdelete, #post-preview').removeClass('disabled');
+                        // Focus on the title field.
+                        $("#title").focus();
+                        return false;
+                    }
+                });
+            });
+        }(jQuery));
+    </script>
+    <?php
+}

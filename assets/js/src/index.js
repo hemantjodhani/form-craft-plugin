@@ -8,7 +8,9 @@ jQuery(document).ready(function ($) {
     fcp_json_to_html_convertor()
     fcp_field_appender_admin()
     fcp_field_settings_handler();
-
+    // alert()
+    $(".post-type-form-craft .titlewrap input").attr("required", true);
+    
     $( ".fcp-form-fields-wrapper" ).sortable({
         placeholder: "ui-state-highlight",
         connectWith: ".fcp-form-fields-wrapper"
